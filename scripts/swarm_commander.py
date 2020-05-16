@@ -19,7 +19,6 @@ import math
 import numpy as np
 import utm
 from simpleDrone import SimpleDrone as SD
-from allign_with_wire_v2 import AlignUAV as AUAV
 
 class SwarmCommander():
     """
@@ -49,12 +48,13 @@ class SwarmCommander():
 
     def ComputeNewPosition(self, pos = None):
         """ If the swarm effect is activated then uav2 will follow uav1"""
-        newPos = np.zeros((1, 4))
+        newPos = [0.0] * 4
         if pos:
             newPos[0] = pos.position.x 
             newPos[1] = pos.position.y 
             newPos[2] = pos.position.z 
             newPos[3] = pos.yaw
+            newPos = np.array(newPos)
         else:
             newPos = np.array(self.uav1.local_pos)
 
