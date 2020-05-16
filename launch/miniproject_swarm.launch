@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<launch>  
+    <node pkg="drone_cable_detection" name="uav_swarm"  type="px4_launch_gazebo.sh" output="screen" />
+    <node pkg="drone_cable_detection" name="uav_swarm_master"  type="target_pos_servers.py" output="screen" args="1 master"  ></node>
+    <node pkg="drone_cable_detection" name="uav_swarm_slave_1" type="target_pos_servers.py"  output="screen" args="2 slave" ></node>     
+    <node pkg="drone_cable_detection" name="align_with_wire_server" type="align_with_wire_server.py"  output="screen" ></node>
+
+    <!-- Include the PID controllers -->
+    <!--<include file="$(find collab_agents_miniproject)/launch/pid_nodes.launch"/>-->
+    
+</launch>

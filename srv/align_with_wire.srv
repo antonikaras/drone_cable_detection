@@ -1,0 +1,3 @@
+float64 timeOut
+---
+mavros_msgs/PositionTarget wire_pos

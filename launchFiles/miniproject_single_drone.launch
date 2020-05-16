@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- Posix SITL environment launch script -->
+    <!-- launches PX4 SITL, Gazebo environment, and spawns vehicle -->
+    <!-- vehicle model and world -->
+    <arg name="est" default="ekf2"/>
+    <arg name="vehicle" default="iris_vu8lidars"/>
+    <arg name="ID" default="1"/>
+    <arg name="mavlink_udp_port" default="14560"/>
+    <arg name="sdf" default=""/>
+    <!--$(find mavlink_sitl_gazebo)/models/$(arg vehicle)_$(arg ID)/model.sdf -->
+    <arg name="rcS" default="$(find px4)/posix-configs/SITL/init/$(arg est)/iris_$(arg ID)"/>
+
+    <!-- Vehicle setup -->
+    <!-- vehicle pose -->
+    <arg name="x" default="0"/>
+    <arg name="y" default="0"/>
+    <arg name="z" default="0.25"/>
+    <arg name="R" default="0"/>
+    <arg name="P" default="0"/>
+    <arg name="Y" default="1.5707"/>
+
+    
+    <!-- PX4 configs -->
+    <arg name="interactive" default="true"/>
+    <!-- generate urdf vehicle model -->
+    <arg name="cmd" default="$(find xacro)/xacro $(find px4)/Tools/sitl_gazebo/models/rotors_description/urdf/iris_base.xacro rotors_description_dir:=$(find px4)/Tools/sitl_gazebo/models/rotors_description mavlink_udp_port:=$(arg mavlink_udp_port) --inorder"/>
+    <param command="$(arg cmd)" name="rotors_description"/>
+    <!-- PX4 SITL -->
+    <arg unless="$(arg interactive)" name="px4_command_arg1" value="-d"/>
+    <arg     if="$(arg interactive)" name="px4_command_arg1" value=""/>
+    <node name="sitl_$(arg ID)" pkg="px4" type="px4" output="screen" args="$(find px4) $(arg rcS) $(arg px4_command_arg1)" required="true"/>
+
+    <!-- gazebo model -->
+    <group if="$(eval arg('sdf') =='')">
+        <node name="$(arg vehicle)_$(arg ID)_spawn" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param rotors_description -model $(arg vehicle)_$(arg ID) -package_to_model -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg R) -P $(arg P) -Y $(arg Y)"/>
+    </group>
+    <group unless="$(eval arg('sdf') =='')">
+        <node name="$(arg vehicle)_$(arg ID)_spawn" pkg="gazebo_ros" type="spawn_model" output="screen" args="-sdf -file $(arg sdf) -model $(arg vehicle)_$(arg ID) -package_to_model -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg R) -P $(arg P) -Y $(arg Y)"/>
+    </group>
+    <!-- Gazebo sim -->
+    <!-- gazebo configs 
+    <arg name="gui" default="true"/>
+    <arg name="debug" default="false"/>
+    <arg name="verbose" default="false"/>
+    <arg name="paused" default="false"/>
+    <arg name="respawn_gazebo" default="false"/>
+    -->
+    <!--<include file="$(find gazebo_ros)/launch/empty_world.launch">
+
+        <arg name="gui" value="$(arg gui)"/>
+        <arg name="world_name" value="$(arg world)"/>
+        <arg name="debug" value="$(arg debug)"/>
+        <arg name="verbose" value="$(arg verbose)"/>
+        <arg name="paused" value="$(arg paused)"/>
+        <arg name="respawn_gazebo" value="$(arg respawn_gazebo)"/>
+    </include>
+    -->
+</launch>
