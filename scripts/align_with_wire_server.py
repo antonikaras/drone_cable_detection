@@ -77,9 +77,34 @@ class AlignMasterWire():
                 frame_id="att_pose",
                 stamp=rospy.Time.now()),
         )
+
+        '''
+        # PID subscribers
+        # Define the PID publishers
+        self.yaw_state_pub = rospy.Publisher("/yaw_angle/state", Float64, queue_size=10)
+        self.yaw_setpoint_pub = rospy.Publisher("/setpoint_yaw", Float64, queue_size=10)
+
+        self.dist_state_pub = rospy.Publisher("/dist/state", Float64, queue_size=10)
+        self.dist_setpoint_pub = rospy.Publisher("/setpoint_dist", Float64, queue_size=10)
+        
+        # Define the PID subscribers
+        yaw_pid_sub = rospy.Subscriber("/yaw_angle/control_effort", Float64, self.yaw_pid_callback)
+        dist_pid_sub = rospy.Subscriber("/dist/control_effort", Float64, self.dist_pid_callback)
+
+        self.yaw_speed = 0.0
+        self.dist_speed = 0.0
+
+        '''
+
         # Ensure that the server is running
         rospy.spin()
-    
+        
+    def yaw_pid_callback(self, data):
+        self.yaw_speed = data.data
+
+    def dist_pid_callback(self, data):
+        self.dist_speed = data.data
+
     def _state_callback(self, topic):
         self.UAV_state.armed = topic.armed
         self.UAV_state.connected = topic.connected
@@ -249,6 +274,16 @@ class AlignMasterWire():
                 new_sp.twist.linear.y = -distPID(dist)
                 new_sp.twist.angular.z = yawPID(-yaw_angle)
 
+                '''
+                new_sp.twist.linear.y = -self.dist_speed
+                new_sp.twist.angular.z = self.yaw_speed
+                # Publish the states
+                self.yaw_state_pub.publish(-yaw_angle)
+                self.yaw_setpoint_pub.publish(0.0)
+                #self.uav.NewSpeed(error)
+                self.dist_state_pub.publish(dist)
+                self.dist_setpoint_pub.publish(0.0)
+                '''
                 self.cmd_vel_pub.publish(new_sp)
             
             if ((abs(dist) < 0.1) and (abs(yaw_dist) < 0.1)):
