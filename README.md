@@ -28,7 +28,7 @@ This package was created for the course SYSTEM DESIGN OF INTELLIGENT COLLABORATI
 
 * exit, to close the swarm commander
 * uav# goto x y z yaw, uav# will go to the  specified location location
-    *  examp1es : ``` uav1 goto -46 15 13 1.5 ```, ``` uav2 goto uav1 ```
+    *  examples : ``` uav1 goto -46 15 13 1.5 ```, ``` uav2 goto uav1 ```
 * uav# land [x y z yaw] -> uav# will land at its current position or at the optional x, y, z, yaw
     * examples : ``` uav1 land ```, ``` uav1 land 1 5 5 1.2 ```
 * uav# return -> uav# will return to its home position and land
