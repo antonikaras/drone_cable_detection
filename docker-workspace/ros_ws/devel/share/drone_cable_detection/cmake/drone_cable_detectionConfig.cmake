@@ -1,0 +1,1 @@
+/workspace/ros_ws/devel/.private/drone_cable_detection/share/drone_cable_detection/cmake/drone_cable_detectionConfig.cmake

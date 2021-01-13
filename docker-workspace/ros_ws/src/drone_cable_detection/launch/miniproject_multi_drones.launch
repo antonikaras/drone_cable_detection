@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<launch>  
+    <!-- vehicle model and world -->
+    <arg name="est" default="ekf2"/>
+    <arg name="vehicle" default="iris_vu8lidars"/>
+    <arg name="world" default="$(find drone_cable_detection)/worlds/d4e_environment1.world"/>  
+    
+    <!-- UAV1 -->
+    <group ns="uav1">
+        <!-- MAVROS and vehicle configs -->        
+        <arg name="ID" value="1"/>
+        <arg name="fcu_url" default="udp://:14540@localhost:14557"/>
+        <!-- PX4 SITL and vehicle spawn -->
+        <include file="$(find drone_cable_detection)/launch/miniproject_single_drone.launch">
+            <arg name="x" value="0"/>
+            <arg name="y" value="0"/>
+            <arg name="z" value="0.25"/>
+            <arg name="R" value="0"/>
+            <arg name="P" value="0"/>
+            <arg name="Y" value="1.5707"/>
+            <arg name="vehicle" value="$(arg vehicle)"/>
+            <arg name="ID" value="$(arg ID)"/>
+            <arg name="rcS" value="$(find px4)/posix-configs/SITL/init/$(arg est)/iris_$(arg ID)"/>
+            <arg name="mavlink_udp_port" value="14560"/>
+            <arg name="sdf" value="$(find drone_cable_detection)/models/$(arg vehicle)/model.sdf"/>
+        </include>
+        <!-- MAVROS -->
+        <include file="$(find mavros)/launch/px4.launch">
+            <arg name="fcu_url" value="$(arg fcu_url)"/>
+            <arg name="gcs_url" value=""/>
+            <arg name="tgt_system" value="$(arg ID)"/>
+            <arg name="tgt_component" value="1"/>
+        </include>
+    </group>
+
+    <!-- UAV2 -->
+   <group ns="uav2">
+    <!-- MAVROS and vehicle configs -->        
+    <arg name="ID" value="2"/>
+    <arg name="fcu_url" default="udp://:14541@localhost:14559"/>
+    <!-- PX4 SITL and vehicle spawn -->
+    <include file="$(find drone_cable_detection)/launch/miniproject_single_drone.launch">
+        <arg name="x" value="1"/>
+        <arg name="y" value="0"/>
+        <arg name="z" value="0.25"/>
+        <arg name="R" value="0"/>
+        <arg name="P" value="0"/>
+        <arg name="Y" value="1.5707"/>
+        <arg name="vehicle" value="$(arg vehicle)"/>
+        <arg name="ID" value="$(arg ID)"/>
+        <arg name="rcS" value="$(find px4)/posix-configs/SITL/init/$(arg est)/iris_$(arg ID)"/>
+        <arg name="mavlink_udp_port" value="14562"/>
+    </include>
+    <!-- MAVROS -->
+    <include file="$(find mavros)/launch/px4.launch">
+        <arg name="fcu_url" value="$(arg fcu_url)"/>
+        <arg name="gcs_url" value=""/>
+        <arg name="tgt_system" value="$(arg ID)"/>
+        <arg name="tgt_component" value="1"/>
+    </include>
+</group>
+
+    
+    <!-- gazebo configs -->
+    <arg name="gui" default="true"/>
+    <arg name="debug" default="false"/>
+    <arg name="verbose" default="false"/>
+    <arg name="paused" default="false"/>
+    <arg name="respawn_gazebo" default="false"/>
+    
+    <!-- Gazebo sim -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="gui" value="$(arg gui)"/>
+        <arg name="world_name" value="$(arg world)"/>
+        <arg name="debug" value="$(arg debug)"/>
+        <arg name="verbose" value="$(arg verbose)"/>
+        <arg name="paused" value="$(arg paused)"/>
+        <arg name="respawn_gazebo" value="$(arg respawn_gazebo)"/>
+    </include>
+
+</launch>

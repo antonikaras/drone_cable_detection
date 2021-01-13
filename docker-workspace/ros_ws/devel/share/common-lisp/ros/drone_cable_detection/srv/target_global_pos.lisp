@@ -1,0 +1,1 @@
+/workspace/ros_ws/devel/.private/drone_cable_detection/share/common-lisp/ros/drone_cable_detection/srv/target_global_pos.lisp

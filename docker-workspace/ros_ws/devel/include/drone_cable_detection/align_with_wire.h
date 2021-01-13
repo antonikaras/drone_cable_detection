@@ -1,0 +1,1 @@
+/workspace/ros_ws/devel/.private/drone_cable_detection/include/drone_cable_detection/align_with_wire.h

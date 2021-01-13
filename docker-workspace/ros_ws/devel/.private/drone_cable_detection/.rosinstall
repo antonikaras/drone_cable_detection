@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /workspace/ros_ws/devel/.private/drone_cable_detection/setup.sh
