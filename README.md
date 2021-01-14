@@ -2,27 +2,73 @@
 
 ## Description
 
-This package was created for the course SYSTEM DESIGN OF INTELLIGENT COLLABORATING SYSTEMS at the University of Southern Denmark. The goal is to use a drone swarm in a master-slave configuration in order to inspect with a high power cable, however the requiremnt for this project is to align the two UAVs with the cable. The code developed was based on the code provided by Oscar Bowen Schofield, https://github.com/OBSchofieldUK/RM-ICS20/ .
+This package was created for the course SYSTEM DESIGN OF INTELLIGENT COLLABORATING SYSTEMS at the University of Southern Denmark. The goal is to use a drone swarm in a master-slave configuration in order to inspect with a high power cable, however the requiremnt for this project is to align the two UAVs with the cable. The code developed was based on the code provided by Oscar Bowen Schofield, https://github.com/OBSchofieldUK/RM-ICS20/ . 
+
+A video demonstation of the system is here : https://youtu.be/MYW7WCP0Eoc
+
+The branch docker_env contains a docker environment, without the neeed to install ROS in your system, with instructions on how to run it. 
 
 ## Dependencies
 
-* ros-melodic, or ros-kinetic,
-* the mavros package v1.8.2, https://dev.px4.io/v1.8.2/en/ros/mavros_installation.html
-* the mavlink ros package,
-* the simple_pid python package, pip install simple-pid
 * px4 firmware v1.8.2, git clone https://github.com/px4/firmware
 * QGroundControl, http://qgroundcontrol.com/
 
+## How to install
+
+* Clone the package your using ```git clone -b docker_env https://github.com/antonikaras/drone_cable_detection.git```
+
+### Install docker
+
+* Docker without Nvidia graphics card https://docs.docker.com/engine/install/ubuntu/
+* Docker with Nvidia graphics card https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker
+* It can be benificial to add your user to the docker group such that sudo is not needed to run docker commands.
+``` 
+    sudo groupadd docker
+    sudo usermod -aG docker $USER
+    and reboot the computer
+```
+
+* Build the Docker image in the root directory of this git repo:
+    
+    ```docker build --tag drone_cable_detector .```
+
+### Install the PX4 Firmware
+
+* Download the PX4 firmware repo version and select version v1.8.2.
+```    
+    cd docker-workspace
+    git clone https://github.com/PX4/Firmware.git
+    cd Firmware
+    git checkout tags/v1.8.2
+    git submodule update --init --recursive
+```
+
+* And run the docker image with:
+	./run-docker-image.sh or ./run-docker-image-gpu.sh
+
+* Now build the PX4 firmware inside the Docker image according to the guide.
+```
+    ./run-docker-image.sh or ./run-docker-image-gpu.sh
+    cd /workspace/Firmware
+    make posix_sitl_default gazebo    
+```
+
 ## How to use
 
-* Clone the package your catkin_workspace/src, using https://github.com/antonikaras/drone_cable_detection.git
-* Execute the bash script installAssets.sh followed by the location of the px4 firmware
-* Add the location of the px4 firmware to the file /sripts/px4_launch_gazebo.sh, FIRMDIR
-* catkin build/ catkin_make 
-* source devel/setup.bash
-* roslaunch drone_cable_detection miniproject_swarm.launch
-* rosrun drone_cable_detection swarm_commander.py
-* run QGroundControl, required to enable the UAV to switch to hover mode
+* Terminal 1:
+```
+    ./run-docker-image.sh or ./run-docker-image-gpu.sh
+    build-ws
+    roslaunch drone_cable_detection miniproject_swarm.launch
+```
+* Terminal 2
+```
+    docker exec -it drone_cable_detector-tester bash
+    src
+    rosrun drone_cable_detection swarm_commander.py
+```
+* Terminal 3
+    run QGroundControl, it is used to visualize the UAVs, create missions, etc...
 
 ## Swarm commander command list
 
