@@ -44,7 +44,7 @@ The branch docker_env contains a docker environment, without the neeed to instal
 ```
 
 * And run the docker image with:
-	./run-docker-image.sh or ./run-docker-image-gpu.sh
+	```./run-docker-image.sh or ./run-docker-image-gpu.sh```
 
 * Now build the PX4 firmware inside the Docker image according to the guide.
 ```
