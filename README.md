@@ -2,7 +2,11 @@
 
 ## Description
 
-This package was created for the course SYSTEM DESIGN OF INTELLIGENT COLLABORATING SYSTEMS at the University of Southern Denmark. The goal is to use a drone swarm in a master-slave configuration in order to inspect with a high power cable, however the requiremnt for this project is to align the two UAVs with the cable. The code developed was based on the code provided by Oscar Bowen Schofield, https://github.com/OBSchofieldUK/RM-ICS20/ .
+This package was created for the course SYSTEM DESIGN OF INTELLIGENT COLLABORATING SYSTEMS at the University of Southern Denmark. The goal is to use a drone swarm in a master-slave configuration in order to inspect with a high power cable, however the requiremnt for this project is to align the two UAVs with the cable. The code developed was based on the code provided by Oscar Bowen Schofield, https://github.com/OBSchofieldUK/RM-ICS20/ . 
+
+A video demonstation of the system is here : https://youtu.be/MYW7WCP0Eoc
+
+The branch docker_env contains a docker environment, without the neeed to install ROS in your system, with instructions on how to run it.
 
 ## Dependencies
 
